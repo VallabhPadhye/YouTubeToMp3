@@ -1,2 +1,3 @@
 pafy
 streamlit
+youtube-dl
