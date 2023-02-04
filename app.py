@@ -1,22 +1,11 @@
-import youtube_dl
-import streamlit as st
+import pafy
 
-ydl_opts = {
-    'format': 'bestaudio/best',
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '320',
-    }],
-}
+def download_video(url):
+    video = pafy.new(url)
+    best_audio = video.getbestaudio(preftype="mp3", ftypestrict=True)
+    best_audio.bitrate = 320
+    best_audio.download()
 
-st.title("YouTube to MP3 Downloader")
-
-url = st.text_input("Enter the URL of the YouTube video:")
-if url:
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        try:
-            ydl.download([url])
-            st.success("Download complete!")
-        except:
-            st.error("An error occurred during the download. Please try again.")
+url = input("Enter the URL of the YouTube video: ")
+download_video(url)
+print("Download complete!")
