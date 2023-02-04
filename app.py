@@ -1,11 +1,14 @@
-import pafy
+from pytube import YouTube
+import streamlit as st
 
-def download_video(url):
-    video = pafy.new(url)
-    best_audio = video.getbestaudio(preftype="mp3", ftypestrict=True)
-    best_audio.bitrate = 320
-    best_audio.download()
+st.title("YouTube to MP3 Downloader")
 
-url = input("Enter the URL of the YouTube video: ")
-download_video(url)
-print("Download complete!")
+url = st.text_input("Enter the URL of the YouTube video:")
+if url:
+    try:
+        yt = YouTube(url)
+        audio_stream = yt.streams.filter(only_audio=True, mime_type='audio/mp3', subtype='mp3').first()
+        audio_stream.download()
+        st.success("Download complete!")
+    except:
+        st.error("An error occurred during the download. Please try again.")
